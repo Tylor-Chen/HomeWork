@@ -22,13 +22,13 @@ namespace HomeWork.Controllers
         [HttpGet("")]
         public ActionResult<IEnumerable<Course>> GetTModels()
         {
-            return db.Courses.ToList();
+            return db.Courses.Where(x => x.IsDeleted == false).ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Course> GetTModelById(int id)
         {
-            return db.Courses.Find(id);
+            return db.Courses.Where(x => x.CourseId == id && x.IsDeleted == false).FirstOrDefault();
         }
 
         [HttpPost("")]
@@ -46,6 +46,7 @@ namespace HomeWork.Controllers
             var c = db.Courses.Find(id);
             c.Credits = model.Credits;
             c.Title = model.Title;
+            c.DateModified = DateTime.Now;
             db.SaveChanges();
 
             return NoContent();
@@ -55,7 +56,7 @@ namespace HomeWork.Controllers
         public ActionResult<Course> DeleteTModelById(int id)
         {
             var c = db.Courses.Find(id);
-            db.Courses.Remove(c);
+            c.IsDeleted = true;
             db.SaveChanges();
 
             return Ok(c);

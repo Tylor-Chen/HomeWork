@@ -4,14 +4,16 @@ using HomeWork.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HomeWork.Migrations
 {
     [DbContext(typeof(ContosoUniversityContext))]
-    partial class ContosoUniversityContextModelSnapshot : ModelSnapshot
+    [Migration("20201211182844_addDateModifiedColumn")]
+    partial class addDateModifiedColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +40,6 @@ namespace HomeWork.Migrations
                         .HasColumnType("int")
                         .HasColumnName("DepartmentID")
                         .HasDefaultValueSql("((1))");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .HasMaxLength(50)
@@ -90,9 +89,6 @@ namespace HomeWork.Migrations
                     b.Property<int?>("InstructorId")
                         .HasColumnType("int")
                         .HasColumnName("InstructorID");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
@@ -191,9 +187,6 @@ namespace HomeWork.Migrations
 
                     b.Property<DateTime?>("HireDate")
                         .HasColumnType("datetime");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HomeWork.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 //using HomeWork.Models;
 
@@ -35,7 +36,15 @@ namespace HomeWork.Controllers
         [HttpPost("")]
         public ActionResult<Department> PostDepartment(Department model)
         {
-            db.Database.ExecuteSqlRaw($"exec dbo.Department_Insert @Name = {model.Name}, @Budget = {model.Budget}, @StartDate = {model.StartDate}, @InstructorID = {model.InstructorId}");
+            SqlParameter[] arySqlParameter = new SqlParameter[]
+            {
+                new SqlParameter("@Name", model.Name),
+                new SqlParameter("@Budget", model.Budget),
+                new SqlParameter("@StartDate", model.StartDate),
+                new SqlParameter("@InstructorId", model.InstructorId)
+            };
+
+            model.DepartmentId = db.Database.ExecuteSqlRaw($"exec dbo.Department_Insert @Name, @Budget, @StartDate, @InstructorId ", arySqlParameter);
 
             return Created("/api/Department/" + model.DepartmentId, model);
         }
@@ -43,23 +52,26 @@ namespace HomeWork.Controllers
         [HttpPut("{id}")]
         public IActionResult PutDepartment(int id, Department model)
         {
-            var c = db.Departments.Find(id);
-            c.Name = model.Name;
-            c.Budget = model.Budget;
-            c.StartDate = model.StartDate;
-            c.InstructorId = model.InstructorId;
-            c.RowVersion = model.RowVersion;
-            db.SaveChanges();
+            SqlParameter[] arySqlParameter = new SqlParameter[]
+            {
+                new SqlParameter("@DepartmentId", id),
+                new SqlParameter("@Name", model.Name),
+                new SqlParameter("@Budget", model.Budget),
+                new SqlParameter("@StartDate", model.StartDate),
+                new SqlParameter("@InstructorId", model.InstructorId)
+            };
+
+            db.Database.ExecuteSqlRaw($"exec dbo.Department_Update @DepartmentId, @Name, @Budget, @StartDate, @InstructorID ", arySqlParameter);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Department> DeleteDepartmentById(int id, Department model)
+        public ActionResult<Department> DeleteDepartmentById(int id)
         {
-            db.Database.ExecuteSqlRaw($"exec dbo.Department_Delete @DepartmentID = {id}, @RowVersion = {model.RowVersion}");
+            var c = db.Departments.FromSqlRaw($"exec dbo.Department_Delete @DepartmentID = {id}");
 
-            return Ok();
+            return Ok(c);
         }
 
         [HttpGet("DepartmentCourseCount")]

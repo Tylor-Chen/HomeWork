@@ -22,13 +22,13 @@ namespace HomeWork.Controllers
         [HttpGet("")]
         public ActionResult<IEnumerable<Person>> GetPersons()
         {
-            return db.People.ToList();
+            return db.People.Where(x => x.IsDeleted == false).ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Person> GetPersonById(int id)
         {
-            return db.People.Find(id);
+            return db.People.Where(x => x.Id == id && x.IsDeleted == false).FirstOrDefault();
         }
 
         [HttpPost("")]
@@ -49,6 +49,7 @@ namespace HomeWork.Controllers
             c.HireDate = model.HireDate;
             c.EnrollmentDate = model.EnrollmentDate;
             c.Discriminator = model.Discriminator;
+            c.DateModified = DateTime.Now;
             db.SaveChanges();
 
             return NoContent();
@@ -58,7 +59,7 @@ namespace HomeWork.Controllers
         public ActionResult<Person> DeletePersonById(int id)
         {
             var c = db.People.Find(id);
-            db.People.Remove(c);
+            c.IsDeleted = true;
             db.SaveChanges();
 
             return Ok(c);
