@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HomeWork.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 //using HomeWork.Models;
 
 namespace HomeWork.Controllers
@@ -32,6 +33,8 @@ namespace HomeWork.Controllers
         }
 
         [HttpPost("")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
         public ActionResult<Enrollment> PostEnrollment(Enrollment model)
         {
             db.Enrollments.Add(model);
@@ -41,6 +44,8 @@ namespace HomeWork.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
         public IActionResult PutEnrollment(int id, Enrollment model)
         {
             var c = db.Enrollments.Find(id);

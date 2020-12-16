@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 #nullable disable
 
@@ -21,8 +22,11 @@ namespace HomeWork.Models
 
         public bool IsDeleted { get; set; }
 
+        [JsonIgnore]
         public virtual Department Department { get; set; }
+        [JsonIgnore]
         public virtual ICollection<CourseInstructor> CourseInstructors { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }

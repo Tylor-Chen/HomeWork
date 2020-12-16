@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using HomeWork.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 //using HomeWork.Models;
 
 namespace HomeWork.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CourseController : ControllerBase
@@ -32,6 +35,8 @@ namespace HomeWork.Controllers
         }
 
         [HttpPost("")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
         public ActionResult<Course> PostTModel(Course model)
         {
             db.Courses.Add(model);
@@ -41,6 +46,8 @@ namespace HomeWork.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
         public IActionResult PutTModel(int id, Course model)
         {
             var c = db.Courses.Find(id);
@@ -72,6 +79,12 @@ namespace HomeWork.Controllers
         public ActionResult<IEnumerable<VwCourseStudentCount>> GetCourseStudentCount()
         {
             return db.VwCourseStudentCounts.ToList();
+        }
+
+        [HttpGet("Error")]
+        public void Error()
+        {
+            throw new Exception("Test Error");
         }
     }
 }

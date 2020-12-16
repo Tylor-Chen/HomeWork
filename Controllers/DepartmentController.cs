@@ -6,6 +6,7 @@ using HomeWork.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 //using HomeWork.Models;
 
 namespace HomeWork.Controllers
@@ -34,6 +35,8 @@ namespace HomeWork.Controllers
         }
 
         [HttpPost("")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
         public ActionResult<Department> PostDepartment(Department model)
         {
             SqlParameter[] arySqlParameter = new SqlParameter[]
@@ -50,6 +53,8 @@ namespace HomeWork.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
         public IActionResult PutDepartment(int id, Department model)
         {
             SqlParameter[] arySqlParameter = new SqlParameter[]
